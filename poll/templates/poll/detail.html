@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+     <link rel="stylesheet" type="text/css" href="{% static 'poll/style.css' %}">
+</head>
+<body>
+<h1>{{question.question_text}}</h1>
+{% if error_message %} <p> <strong>{{error_message}}</strong></p>{% endif %}
+
+<form action="{% url 'vote' question.id %}" method="post">
+{% csrf_token %}
+{% for choice in question.choice_set.all %}
+    <!--<input type ="radio" name="choice" id="choice{{forloop.counter}}" value="{{choice.id}}">-->
+    <input type ="checkbox" name="choice" id="choice{{forloop.counter}}" value="{{choice.id}}" multiple>
+    <label for ="choice{{forloop.counter}}">{{choice.choice_text}}</label><br>
+{% endfor %}
+<input type="submit" value="Vote">
+</form>
+
+<h5><a href="/poll/">전 페이지로 이동</a></h5>
+
+
+</body>
+</html>

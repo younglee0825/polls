@@ -1,0 +1,7 @@
+body{
+    background:white url("image/background.png") no-repeat;
+    background-position:right bottom;
+    background-size : 100px 100px
+}
+
+font-size : 20px
