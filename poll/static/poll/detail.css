@@ -4,4 +4,7 @@ body{
     background-size : 100px 100px
 }
 
-font-size : 20px
+li a{color: blue;
+    text-decoration: none;}
+
+h3{font size }
