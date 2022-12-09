@@ -30,7 +30,7 @@ def vote(request, question_id):
         selected_choice = request.POST.getlist('choice')
         print(selected_choice)
     except(KeyError, Choice.DoesNotExit):
-     return render(request, 'poll/detail.html', {'question':question,
+        return render(request, 'poll/detail.html', {'question':question,
                                                         'error_message': "You didn't select a choice." })
     else:
         for i in selected_choice:
@@ -39,3 +39,37 @@ def vote(request, question_id):
             selection.save()
             print(selection)
         return HttpResponseRedirect(reverse('results', args=(question.id,)))
+
+def make_chart_data(data_question):
+
+    my_data = list()
+    for choice in data_question.choice_set.all():
+        my_dict = dict()
+        my_dict['name'] = choice.choice_text
+        my_dict['y'] = choice.votes
+        my_data.append(my_dict)
+
+    chart_data = [{
+        'name' : 'votes',
+        'colorByPoint':'true',
+        'data' : my_data,
+    }]
+
+    return chart_data()
+
+import json
+def result_chart(request,question_id):
+    question = get_object_or_404(Question, pk=question_id)
+
+    chart_data = make_chart_data(question)
+    dump = json.dumps(chart_data)
+
+    chart_title={
+        'text': '투표 결과<br>'+ question.question_text
+    }
+    dump_title = json.dumps(chart_title)
+
+    return render(request,'poll/chart.html',{'chart_data': dump, 'chart_title': dump_title})
+
+
+
